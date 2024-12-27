@@ -32,9 +32,9 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase # Pull changes before pushing
           git add README.md
           git commit -m "Updated README with latest certificates" || echo "No changes to commit"
+          git pull --rebase # Pull latest changes from the repository
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
