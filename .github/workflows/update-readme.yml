@@ -26,6 +26,8 @@ jobs:
       # Run the PHP script
       - name: Run PHP Script
         run: php fetch_cert.php
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Commit and push changes
       - name: Commit and Push Changes

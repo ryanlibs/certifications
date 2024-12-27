@@ -3,35 +3,39 @@
 $apiUrl = "https://sololearn-api.replit.app/?profile=test"; # repo: https://github.com/ryanlibs/sololearn-profile-fetcher
 
 function createGitHubIssue($title, $body) {
-    $repoOwner = 'ryanlibs';
-    $repoName = 'certifications'; 
-    $token = getenv('GITHUB_TOKEN');
+  $repoOwner = 'ryanlibs';
+  $repoName = 'certifications';
+  $token = getenv('GITHUB_TOKEN');
 
-    $url = "https://api.github.com/repos/$repoOwner/$repoName/issues";
-    $data = json_encode(['title' => $title, 'body' => $body]);
+  if (!$token) {
+      echo "GITHUB_TOKEN is not set. Ensure it is properly configured in the workflow.\n";
+      exit(1);
+  }
 
-    $headers = [
-        "Authorization: Bearer $token",
-        "Content-Type: application/json",
-        "User-Agent: GitHub Actions"
-    ];
+  $url = "https://api.github.com/repos/$repoOwner/$repoName/issues";
+  $data = json_encode(['title' => $title, 'body' => $body]);
 
-    $options = [
-        'http' => [
-            'method' => 'POST',
-            'header' => implode("\r\n", $headers),
-            'content' => $data
-        ]
-    ];
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, [
+      "Authorization: Bearer $token", // Correct Authorization header
+      "Content-Type: application/json",
+      "User-Agent: GitHub Actions"
+  ]);
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
-    $context = stream_context_create($options);
-    $response = file_get_contents($url, false, $context);
+  $response = curl_exec($ch);
+  $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-    if ($response === false) {
-        echo "Failed to create GitHub issue.\n";
-    } else {
-        echo "GitHub issue created successfully.\n";
-    }
+  if ($response === false || $httpCode !== 201) {
+      $error = curl_error($ch);
+      echo "Failed to create GitHub issue. HTTP Code: $httpCode, Error: $error\n";
+  } else {
+      echo "GitHub issue created successfully. Response: $response\n";
+  }
+
+  curl_close($ch);
 }
 
 $response = file_get_contents($apiUrl);
