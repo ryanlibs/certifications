@@ -1,21 +1,61 @@
 <?php
 
-$apiUrl = "https://sololearn-api.replit.app/?profile=33173273"; # repo: https://github.com/ryanlibs/sololearn-profile-fetcher
+$apiUrl = "https://sololearn-api.replit.app/?profile=test"; # repo: https://github.com/ryanlibs/sololearn-profile-fetcher
+
+function createGitHubIssue($title, $body) {
+    $repoOwner = 'ryanlibs';
+    $repoName = 'certifications'; 
+    $token = getenv('GITHUB_TOKEN');
+
+    $url = "https://api.github.com/repos/$repoOwner/$repoName/issues";
+    $data = json_encode(['title' => $title, 'body' => $body]);
+
+    $headers = [
+        "Authorization: token $token",
+        "Content-Type: application/json",
+        "User-Agent: GitHub Actions"
+    ];
+
+    $options = [
+        'http' => [
+            'method' => 'POST',
+            'header' => implode("\r\n", $headers),
+            'content' => $data
+        ]
+    ];
+
+    $context = stream_context_create($options);
+    $response = file_get_contents($url, false, $context);
+
+    if ($response === false) {
+        echo "Failed to create GitHub issue.\n";
+    } else {
+        echo "GitHub issue created successfully.\n";
+    }
+}
 
 $response = file_get_contents($apiUrl);
 if ($response === false) {
-    die("Error fetching data from the API.");
+    $errorMessage = "Error fetching data from the API.";
+    echo $errorMessage . "\n";
+    createGitHubIssue("API Fetch Error", $errorMessage);
+    exit(1); // Stop the workflow
 }
 
 $data = json_decode($response, true);
 if (json_last_error() !== JSON_ERROR_NONE) {
-    die("Error decoding JSON: " . json_last_error_msg());
+    $errorMessage = "Error decoding JSON: " . json_last_error_msg();
+    echo $errorMessage . "\n";
+    createGitHubIssue("JSON Decoding Error", $errorMessage);
+    exit(1); // Stop the workflow
 }
 
 // Extract certificates
 if (!isset($data['certificates']) || !is_array($data['certificates'])) {
-    echo "No certificates found in the API response.\n";
-    exit;
+    $errorMessage = "No certificates found in the API response.";
+    echo $errorMessage . "\n";
+    createGitHubIssue("No Certificates Found", $errorMessage);
+    exit(1); // Stop the workflow
 }
 
 $certificates = $data['certificates'];
@@ -42,7 +82,7 @@ foreach ($certificates as $certificate) {
     $startDate = htmlspecialchars(substr($certificate['startDate'], 0, 10)); // Extract YYYY-MM-DD
 
     // Extract certificate code using regex
-    if (preg_match('/\/certificates\/(CC-[^\/]+)/', $certificate['url'], $matches)) {
+    if (preg_match('/\/certificates\/([A-Z]{2}-[^\/]+)/', $certificate['url'], $matches)) {
         $certificateCode = $matches[1];
     } else {
         echo "Failed to extract certificate code for: " . htmlspecialchars($certificate['name']) . "\n";
@@ -64,7 +104,7 @@ foreach ($certificates as $certificate) {
       </td>
       <td>
         <ul>
-          <li><strong>Issued Date:</strong> $startDate</li>
+          <li><strong>Date:</strong> $startDate</li>
           <li><a href=\"$shareUrl\" target=\"_blank\">View Certificate</a></li>
         </ul>
       </td>
