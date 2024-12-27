@@ -1,0 +1,39 @@
+name: Update README with Certificates
+
+on:
+  schedule:
+    # Run the workflow 12:00 AM PHT and 10:00 AM PHT
+    - cron: "0 16 * * *"
+    - cron: "0 2 * * *" 
+  workflow_dispatch:
+    # Allows manual trigger
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Set up PHP environment
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+
+      # Run the PHP script
+      - name: Run PHP Script
+        run: php fetch_cert.php
+
+      # Commit and push changes
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Updated README with latest certificates"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
