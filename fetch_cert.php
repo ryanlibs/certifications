@@ -55,12 +55,12 @@ foreach ($certificates as $certificate) {
 
     $table .= "<tr>
       <td align=\"center\">
-        <img src=\"$iconUrl\" alt=\"$name Icon\" width=\"100\"><br>
+        <img src=\"$iconUrl\" alt=\"$name Icon\" width=\"200\"><br>
         <strong>$name</strong>
       </td>
       <td align=\"center\">
         <a href=\"$pdfUrl\" target=\"_blank\">📄 PDF</a><br>
-        <img src=\"$jpgUrl\" alt=\"$name Certificate\" width=\"300\">
+        <img src=\"$jpgUrl\" alt=\"$name Certificate\" width=\"450\">
       </td>
       <td>
         <ul>
