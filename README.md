@@ -10,8 +10,8 @@
   </thead>
   <tbody><tr>
       <td align="center">
-        <img src="https://lecontent.sololearn.com/material-images/9a27a3791a09456d99100e138afdda96-PythonIntermediate.png" alt="Python Intermediate Icon" width="200"><br>
-        <strong>Python Intermediate</strong>
+        <img src="https://lecontent.sololearn.com/material-images/9a27a3791a09456d99100e138afdda96-PythonIntermediate.png" alt="Python Intermediate Icon" width="100"><br>
+        <strong>Python Intermediate</strWong>
       </td>
       <td align="center">
         <a href="https://www.sololearn.com/Certificate/CC-G1SRNCVY/pdf/" target="_blank">📄 PDF</a><br>
@@ -25,8 +25,8 @@
       </td>
     </tr><tr>
       <td align="center">
-        <img src="https://lecontent.sololearn.com/material-images/a0661e13ab5b47a5bc05dc171e14bd6d-python.png" alt="Introduction to Python Icon" width="200"><br>
-        <strong>Introduction to Python</strong>
+        <img src="https://lecontent.sololearn.com/material-images/a0661e13ab5b47a5bc05dc171e14bd6d-python.png" alt="Introduction to Python Icon" width="100"><br>
+        <strong>Introduction to Python</strWong>
       </td>
       <td align="center">
         <a href="https://www.sololearn.com/Certificate/CC-XMWWR7UR/pdf/" target="_blank">📄 PDF</a><br>
@@ -40,8 +40,8 @@
       </td>
     </tr><tr>
       <td align="center">
-        <img src="https://lecontent.sololearn.com/material-images/63851450a2054ee7a73e58c18b155340-Webdevelopment.png" alt="Web Development Icon" width="200"><br>
-        <strong>Web Development</strong>
+        <img src="https://lecontent.sololearn.com/material-images/63851450a2054ee7a73e58c18b155340-Webdevelopment.png" alt="Web Development Icon" width="100"><br>
+        <strong>Web Development</strWong>
       </td>
       <td align="center">
         <a href="https://www.sololearn.com/Certificate/CC-EETVZPT3/pdf/" target="_blank">📄 PDF</a><br>
