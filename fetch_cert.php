@@ -1,6 +1,6 @@
 <?php
 
-$apiUrl = "https://sololearn-api.replit.app/?profile=33173273";
+$apiUrl = "https://sololearn-api.replit.app/?profile=33173273"; # repo: https://github.com/ryanlibs/sololearn-profile-fetcher
 
 $response = file_get_contents($apiUrl);
 if ($response === false) {
