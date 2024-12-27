@@ -26,7 +26,7 @@ usort($certificates, function ($a, $b) {
 });
 
 // Generate table content
-$table = '<table>
+$newTable = '<table>
   <thead>
     <tr>
       <th>Course</th>
@@ -53,10 +53,10 @@ foreach ($certificates as $certificate) {
     $jpgUrl = "https://www.sololearn.com/Certificate/$certificateCode/jpg/";
     $shareUrl = htmlspecialchars($certificate['shareUrl']);
 
-    $table .= "<tr>
+    $newTable .= "<tr>
       <td align=\"center\">
         <img src=\"$iconUrl\" alt=\"$name Icon\" width=\"100\"><br>
-        <strong>$name</strWong>
+        <strong>$name</strong>
       </td>
       <td align=\"center\">
         <a href=\"$pdfUrl\" target=\"_blank\">📄 PDF</a><br>
@@ -71,13 +71,24 @@ foreach ($certificates as $certificate) {
     </tr>";
 }
 
-$table .= '</tbody>
+$newTable .= '</tbody>
 </table>';
 
 // Add table to README.md
 $readmePath = 'README.md';
-$newReadmeContent = "# Certifications\n\n" . $table;
+$newReadmeContent = "# Certifications\n\n" . $newTable;
 
+// Check if the content has changed
+if (file_exists($readmePath)) {
+    $currentContent = file_get_contents($readmePath);
+
+    if (trim($currentContent) === trim($newReadmeContent)) {
+        echo "No changes in certificates. README.md not updated.\n";
+        exit; // Exit if there's no difference
+    }
+}
+
+// Update README.md if the content has changed
 file_put_contents($readmePath, $newReadmeContent);
 
 echo "README.md has been updated with the latest certificates.\n";
