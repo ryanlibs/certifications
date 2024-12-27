@@ -11,7 +11,7 @@ function createGitHubIssue($title, $body) {
     $data = json_encode(['title' => $title, 'body' => $body]);
 
     $headers = [
-        "Authorization: token $token",
+        "Authorization: Bearer $token",
         "Content-Type: application/json",
         "User-Agent: GitHub Actions"
     ];
