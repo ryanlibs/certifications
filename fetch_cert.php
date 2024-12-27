@@ -1,6 +1,6 @@
 <?php
 
-$apiUrl = "https://sololearn-api.replit.app/?profile=test"; # repo: https://github.com/ryanlibs/sololearn-profile-fetcher
+$apiUrl = "https://sololearn-api.replit.app/?profile=33173273"; # repo: https://github.com/ryanlibs/sololearn-profile-fetcher
 
 function createGitHubIssue($title, $body) {
   $repoOwner = 'ryanlibs';
