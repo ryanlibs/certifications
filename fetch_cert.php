@@ -111,28 +111,21 @@ foreach ($allCertificates as $certificate) {
     // Reset default values
     $pdfUrl = null;
     $jpgUrl = null;
-    $pdfEmbed = null;
-    $shareUrl = null;
 
     // Handle fetched certificates
     if (isset($certificate['url']) && preg_match('/\/certificates\/([A-Z]{2}-[^\/]+)/', $certificate['url'], $matches)) {
         $certificateCode = $matches[1];
         $pdfUrl = "https://www.sololearn.com/Certificate/$certificateCode/pdf/";
         $jpgUrl = "https://www.sololearn.com/Certificate/$certificateCode/jpg/";
-        $shareUrl = htmlspecialchars($certificate['shareUrl']);
     }
 
     // Handle manual certificates
     if (isset($certificate['imageUrl'])) {
         $fileExtension = pathinfo($certificate['imageUrl'], PATHINFO_EXTENSION);
-        echo "Processing file: " . htmlspecialchars($certificate['imageUrl']) . " (Extension: $fileExtension)\n"; // Debugging output
         if (strtolower($fileExtension) === 'pdf') {
             $pdfUrl = htmlspecialchars($certificate['imageUrl']);
-            $pdfEmbed = "<embed src=\"$pdfUrl\" width=\"450\" height=\"600\" type=\"application/pdf\">";
-            echo "PDF Embed set for: " . htmlspecialchars($certificate['imageUrl']) . "\n"; // Debugging output
         } else {
             $jpgUrl = htmlspecialchars($certificate['imageUrl']);
-            echo "Image URL set for: " . htmlspecialchars($certificate['imageUrl']) . "\n"; // Debugging output
         }
     }
 
@@ -148,28 +141,19 @@ foreach ($allCertificates as $certificate) {
       </td>
       <td align=\"center\">";
 
-    // Render embedded PDF or image preview
-    if (!empty($pdfEmbed)) {
-        $newTable .= $pdfEmbed;
-    } elseif (!empty($jpgUrl)) {
+    // Add PDF link or image preview
+    if (!empty($jpgUrl)) {
         $newTable .= "<img src=\"$jpgUrl\" alt=\"$name Certificate\" width=\"450\">";
     }
-
-    // Add fallback PDF link if not embedded
-    if ($pdfUrl && empty($pdfEmbed)) {
+    if (!empty($pdfUrl)) {
         $newTable .= "<br><a href=\"$pdfUrl\" target=\"_blank\">📄 View PDF Certificate</a>";
     }
 
     $newTable .= "</td>
       <td>
         <ul>
-          <li><strong>Date:</strong> $startDate</li>";
-
-    if ($shareUrl) {
-        $newTable .= "<li><a href=\"$shareUrl\" target=\"_blank\">View Certificate</a></li>";
-    }
-
-    $newTable .= "</ul>
+          <li><strong>Date:</strong> $startDate</li>
+        </ul>
       </td>
     </tr>";
 }
