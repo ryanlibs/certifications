@@ -123,49 +123,54 @@ $newTable = '<table>
 
     // Handle manual certificates
     if (isset($certificate['imageUrl'])) {
-        $fileExtension = pathinfo($certificate['imageUrl'], PATHINFO_EXTENSION);
-        if (strtolower($fileExtension) === 'pdf') {
-            $pdfUrl = htmlspecialchars($certificate['imageUrl']);
-        } else {
-            $jpgUrl = htmlspecialchars($certificate['imageUrl']);
-        }
-    }
+      $fileExtension = pathinfo($certificate['imageUrl'], PATHINFO_EXTENSION);
+      if (strtolower($fileExtension) === 'pdf') {
+          // Embed the PDF for inline preview
+          $pdfUrl = htmlspecialchars($certificate['imageUrl']);
+          $pdfEmbed = "<embed src=\"$pdfUrl\" width=\"450\" height=\"600\" type=\"application/pdf\">";
+      } else {
+          $jpgUrl = htmlspecialchars($certificate['imageUrl']);
+          $pdfEmbed = null; // Reset embed for non-PDFs
+      }
+  }
+  
 
     $newTable .= "<tr>
-      <td align=\"center\">";
-
-    // Add icon if available
-    if ($iconUrl) {
-        $newTable .= "<img src=\"$iconUrl\" alt=\"$name Icon\" width=\"100\"><br>";
-    }
-
-    $newTable .= "<strong>$name</strong>
-      </td>
-      <td align=\"center\">";
-
-    // Add PDF link if available
-    if ($pdfUrl) {
-        $newTable .= "<a href=\"$pdfUrl\" target=\"_blank\">📄 View PDF Certificate</a><br>";
-    }
-
-    // Add image preview if available
-    if ($jpgUrl) {
-        $newTable .= "<img src=\"$jpgUrl\" alt=\"$name Certificate\" width=\"450\">";
-    }
-
-    $newTable .= "</td>
-      <td>
-        <ul>
-          <li><strong>Date:</strong> $startDate</li>";
-
-    // Add share link if available
-    if ($shareUrl) {
-        $newTable .= "<li><a href=\"$shareUrl\" target=\"_blank\">View Certificate</a></li>";
-    }
-
-    $newTable .= "</ul>
-      </td>
-    </tr>";
+    <td align=\"center\">";
+  
+  if ($iconUrl) {
+      $newTable .= "<img src=\"$iconUrl\" alt=\"$name Icon\" width=\"100\"><br>";
+  }
+  
+  $newTable .= "<strong>$name</strong>
+    </td>
+    <td align=\"center\">";
+  
+  // Render embedded PDF or image preview
+  if (!empty($pdfEmbed)) {
+      $newTable .= $pdfEmbed;
+  } elseif (!empty($jpgUrl)) {
+      $newTable .= "<img src=\"$jpgUrl\" alt=\"$name Certificate\" width=\"450\">";
+  }
+  
+  // Add fallback PDF link if not embedded
+  if ($pdfUrl && empty($pdfEmbed)) {
+      $newTable .= "<br><a href=\"$pdfUrl\" target=\"_blank\">📄 View PDF Certificate</a>";
+  }
+  
+  $newTable .= "</td>
+    <td>
+      <ul>
+        <li><strong>Date:</strong> $startDate</li>";
+  
+  if ($shareUrl) {
+      $newTable .= "<li><a href=\"$shareUrl\" target=\"_blank\">View Certificate</a></li>";
+  }
+  
+  $newTable .= "</ul>
+    </td>
+  </tr>";
+  
 }
 
 $newTable .= '</tbody>
